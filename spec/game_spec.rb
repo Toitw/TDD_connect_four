@@ -53,10 +53,42 @@ describe Game do
         end
     end 
     
-    describe '#game_over?' do
-        subject(:game_over_horizontal) { described_class.new }
+    describe '#check_rows' do
+        subject(:game_over_row) { described_class.new }
         context 'After a player drop a token, it checks if he has won with an horizontal line'
-        it 'Returns true if a player has four symbols horizontally in a row' do
-            game_over_horizontal.board = [1,0,0,0,0,0,], [1,0,0,0,0,0,], [1,0,0,0,0,0,], [1,0,0,0,0,0,]
+        it 'Creates an array with each row as a nested array, being the first nested array [1,1,1,1,0,0]' do
+            game_over_row.board = [[1,0,0,0,0,0,], [1,0,0,0,0,0,], [1,0,0,0,0,0,], [1,0,0,0,0,0,], [0,0,0,0,0,0], [0,0,0,0,0,0]]
+            game_over_row.check_rows
+            expect(game_over_row.row_check_board[0]).to eq([1,1,1,1,0,0])
+        end
 
+        context 'After a player drop a token, it checks if he has won with an horizontal line'
+        it 'Returns true when a player has four symbols horizontally in a row' do
+            game_over_row.board = [[1,0,0,0,0,0,], [1,0,0,0,0,0,], [1,0,0,0,0,0,], [1,0,0,0,0,0,], [0,0,0,0,0,0], [0,0,0,0,0,0]]
+            game_over_row.check_rows
+            expect(game_over_row.check_rows).to be true
+        end
+
+        it 'Returns false when a player does not have four symbols horizontally in a row' do
+            game_over_row.board = [[1,0,0,0,0,0,], [1,0,0,0,0,0,], [2,0,0,0,0,0,], [1,0,0,0,0,0,], [0,0,0,0,0,0], [0,0,0,0,0,0]]
+            game_over_row.check_rows
+            expect(game_over_row.check_rows).to be false
+        end
+    end
+
+    describe '#check_columns' do
+        subject(:game_over_column) { described_class.new }
+        context 'After a player drop a token, it checks if he has won with a vertical 4'
+        it 'Returns true when a player has four symbols vertically in a row' do
+            game_over_column.board = [[0,0,0,0,0,0,], [0,0,0,0,0,0,], [2,2,1,1,1,1,], [0,0,0,0,0,0,], [0,0,0,0,0,0], [0,0,0,0,0,0]]
+            game_over_column.check_columns
+            expect(game_over_column.check_columns).to be true
+        end
+
+        it 'Returns false when a player has four symbols vertically in a row' do
+            game_over_column.board = [[0,0,0,0,0,0,], [0,0,0,0,0,0,], [2,2,1,2,1,1,], [0,0,0,0,0,0,], [0,0,0,0,0,0], [0,0,0,0,0,0]]
+            game_over_column.check_columns
+            expect(game_over_column.check_columns).to be false
+        end
+    end
 end
