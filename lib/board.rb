@@ -1,6 +1,7 @@
 class Board
-    attr_reader :column
+    attr_accessor :board
+
     def initialize
-        @column = Array.new(7) {Array.new(6, 0)}
+        @board = Array.new(7) {Array.new(6, 0)}
     end
 end
