@@ -3,7 +3,7 @@ require_relative 'player'
 
 class Game
     attr_reader :player1, :player2
-    attr_accessor :column_selection, :board, :row_check_board
+    attr_accessor :column_selection, :board, :row_check_board, :start_game, :current_player
 
     def initialize(player1 = Player.new('',1), player2 = Player.new('',2), board = Board.new.board)
         @player1 = player1
@@ -13,6 +13,7 @@ class Game
         @row_check_board = nil
         @column_selection = nil
         @game_over = false
+        @start_game = false
     end
 
     def game_intro
@@ -29,12 +30,14 @@ class Game
     end
 
     def select_column
-        @column_selection = gets.chomp.to_int
+        display_board
+        puts "#{@current_player.name}, select a column to drop your token"
+        @column_selection = gets.chomp.to_i
     end
 
     def check_rows
         #zip combine the same index of diferent arrays in an array. Perfect to create the rows
-        @row_check_board = @board[0].zip(@board[1], @board[2], @board[3], @board[4], @board[5])
+        @row_check_board = @board[0].zip(@board[1], @board[2], @board[3], @board[4], @board[5], @board[6])
         if @row_check_board.select {|arr| arr.join().match(@current_player.winning_comb)}.empty?
             false
         else
@@ -76,6 +79,41 @@ class Game
     end
 
     def game_over?
-        
+        if check_columns == true || check_rows == true || check_diagonals(create_diagonal_winning_combination) == true
+            true
+        else
+            @current_player == @player1 ? @current_player = @player2 : @current_player = @player1
+            false
+        end
     end
+
+    def play_again?
+
+        puts "Game over! #{@current_player.name} wins. Would you like to play again? Y/N"
+        answer = gets.chomp
+        answer == "Y" ? Game.new.play : "Thank you for playing :)"
+    end
+
+    def play_round
+        select_column
+        drop_token(@column_selection)
+        game_over?
+    end
+
+    def play
+        game_intro
+        while play_round == false do
+            play_round
+        end
+        play_again?
+    end
+
+    def display_board
+        puts "1 2 3 4 5 6 7"
+        @row_check_board = @board[0].zip(@board[1], @board[2], @board[3], @board[4], @board[5], @board[6])
+        @row_check_board.each do |row|
+            puts row.join(" ")
+        end
+    end
+        
 end

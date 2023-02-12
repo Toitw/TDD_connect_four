@@ -59,7 +59,7 @@ describe Game do
         it 'Creates an array with each row as a nested array, being the first nested array [1,1,1,1,0,0]' do
             game_over_row.board = [[1,0,0,0,0,0], [1,0,0,0,0,0], [1,0,0,0,0,0], [1,0,0,0,0,0], [0,0,0,0,0,0], [0,0,0,0,0,0], [0,0,0,0,0,0]]
             game_over_row.check_rows
-            expect(game_over_row.row_check_board[0]).to eq([1,1,1,1,0,0])
+            expect(game_over_row.row_check_board[0]).to eq([1,1,1,1,0,0,0])
         end
 
         context 'After a player drop a token, it checks if he has won with an horizontal line'
@@ -124,5 +124,36 @@ describe Game do
         end
     end
    
+    describe '#game_over?' do
+        subject(:game_over) {described_class.new}
+        context 'When a player wins having 4 symbols in a row, column or diagonal'
+        it 'returns true when player has 4 symbols in a row' do
+            game_over.board = [[0,0,0,0,0,0], [1,0,0,0,0,0], [1,0,0,0,0,0], [1,0,0,0,0,0], [1,0,0,0,0,0], [0,0,0,0,0,0], [0,0,0,0,0,0]]
+            expect(game_over.game_over?).to be true
+        end
+
+        it 'returns true when player has 4 symbols in a column' do
+            game_over.board = [[0,0,0,0,0,0], [1,1,1,1,0,0], [0,0,0,0,0,0], [1,0,0,0,0,0], [1,0,0,0,0,0], [0,0,0,0,0,0], [0,0,0,0,0,0]]
+            expect(game_over.game_over?).to be true
+        end
+
+        it 'returns true when player has 4 symbols in a diagonal' do
+            game_over.board = [[0,0,0,0,0,0], [0,0,0,0,0,0], [0,0,0,0,0,0], [0,0,0,0,0,1], [0,0,0,0,1,0], [0,0,0,1,0,0], [0,0,1,0,0,0]]
+            expect(game_over.game_over?).to be true
+        end
+
+        context 'When a player does not win because he does not have 4 symbols in a row, column or diagonal'
+        it 'returns false when player does not have 4 symbols in a row, column or diagonal' do
+            game_over.board = [[0,0,0,0,0,0], [0,0,0,0,0,0], [0,0,0,0,0,0], [0,0,0,0,0,1], [0,0,0,0,1,0], [0,0,0,1,0,0], [0,1,0,0,0,0]]
+            expect(game_over.game_over?).to be false
+        end
+
+        it 'Change @current_player when game_over? is false' do
+            game_over.board = [[0,0,0,0,0,0], [0,0,0,0,0,0], [0,0,0,0,0,0], [0,0,0,0,0,1], [0,0,0,0,1,0], [0,0,0,1,0,0], [0,1,0,0,0,0]]
+            game_over.game_over?
+            expect(game_over.current_player.symbol).to eq(2)
+        end
+    end
         
+
 end
