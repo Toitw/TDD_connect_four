@@ -3,7 +3,7 @@ require_relative 'player'
 
 class Game
     attr_reader :player1, :player2
-    attr_accessor :column_selection, :board, :row_check_board, :start_game, :current_player
+    attr_accessor :column_selection, :board, :row_check_board, :start_game, :current_player, :game_over
 
     def initialize(player1 = Player.new('',1), player2 = Player.new('',2), board = Board.new.board)
         @player1 = player1
@@ -32,7 +32,7 @@ class Game
     def select_column
         display_board
         puts "#{@current_player.name}, select a column to drop your token"
-        @column_selection = gets.chomp.to_i
+        @column_selection = gets.chomp.to_i - 1
     end
 
     def check_rows
@@ -80,7 +80,7 @@ class Game
 
     def game_over?
         if check_columns == true || check_rows == true || check_diagonals(create_diagonal_winning_combination) == true
-            true
+            @game_over = true
         else
             @current_player == @player1 ? @current_player = @player2 : @current_player = @player1
             false
@@ -97,13 +97,13 @@ class Game
     def play_round
         select_column
         drop_token(@column_selection)
-        game_over?
     end
 
     def play
         game_intro
-        while play_round == false do
+        until @game_over == true do
             play_round
+            game_over?
         end
         play_again?
     end
