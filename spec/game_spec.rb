@@ -57,20 +57,20 @@ describe Game do
         subject(:game_over_row) { described_class.new }
         context 'After a player drop a token, it checks if he has won with an horizontal line'
         it 'Creates an array with each row as a nested array, being the first nested array [1,1,1,1,0,0]' do
-            game_over_row.board = [[1,0,0,0,0,0,], [1,0,0,0,0,0,], [1,0,0,0,0,0,], [1,0,0,0,0,0,], [0,0,0,0,0,0], [0,0,0,0,0,0]]
+            game_over_row.board = [[1,0,0,0,0,0], [1,0,0,0,0,0], [1,0,0,0,0,0], [1,0,0,0,0,0], [0,0,0,0,0,0], [0,0,0,0,0,0], [0,0,0,0,0,0]]
             game_over_row.check_rows
             expect(game_over_row.row_check_board[0]).to eq([1,1,1,1,0,0])
         end
 
         context 'After a player drop a token, it checks if he has won with an horizontal line'
         it 'Returns true when a player has four symbols horizontally in a row' do
-            game_over_row.board = [[1,0,0,0,0,0,], [1,0,0,0,0,0,], [1,0,0,0,0,0,], [1,0,0,0,0,0,], [0,0,0,0,0,0], [0,0,0,0,0,0]]
+            game_over_row.board = [[1,0,0,0,0,0], [1,0,0,0,0,0], [1,0,0,0,0,0], [1,0,0,0,0,0], [0,0,0,0,0,0], [0,0,0,0,0,0], [0,0,0,0,0,0]]
             game_over_row.check_rows
             expect(game_over_row.check_rows).to be true
         end
 
         it 'Returns false when a player does not have four symbols horizontally in a row' do
-            game_over_row.board = [[1,0,0,0,0,0,], [1,0,0,0,0,0,], [2,0,0,0,0,0,], [1,0,0,0,0,0,], [0,0,0,0,0,0], [0,0,0,0,0,0]]
+            game_over_row.board = [[1,0,0,0,0,0,], [1,0,0,0,0,0,], [2,0,0,0,0,0,], [1,0,0,0,0,0,], [0,0,0,0,0,0], [0,0,0,0,0,0], [0,0,0,0,0,0]]
             game_over_row.check_rows
             expect(game_over_row.check_rows).to be false
         end
@@ -80,15 +80,49 @@ describe Game do
         subject(:game_over_column) { described_class.new }
         context 'After a player drop a token, it checks if he has won with a vertical 4'
         it 'Returns true when a player has four symbols vertically in a row' do
-            game_over_column.board = [[0,0,0,0,0,0,], [0,0,0,0,0,0,], [2,2,1,1,1,1,], [0,0,0,0,0,0,], [0,0,0,0,0,0], [0,0,0,0,0,0]]
+            game_over_column.board = [[0,0,0,0,0,0,], [0,0,0,0,0,0,], [2,2,1,1,1,1,], [0,0,0,0,0,0,], [0,0,0,0,0,0], [0,0,0,0,0,0], [0,0,0,0,0,0]]
             game_over_column.check_columns
             expect(game_over_column.check_columns).to be true
         end
 
         it 'Returns false when a player has four symbols vertically in a row' do
-            game_over_column.board = [[0,0,0,0,0,0,], [0,0,0,0,0,0,], [2,2,1,2,1,1,], [0,0,0,0,0,0,], [0,0,0,0,0,0], [0,0,0,0,0,0]]
+            game_over_column.board = [[0,0,0,0,0,0,], [0,0,0,0,0,0,], [2,2,1,2,1,1,], [0,0,0,0,0,0,], [0,0,0,0,0,0], [0,0,0,0,0,0], [0,0,0,0,0,0]]
             game_over_column.check_columns
             expect(game_over_column.check_columns).to be false
         end
     end
+
+    describe '#diagonal_winning_combination' do
+        subject(:game_over_diagonal) { described_class.new }
+        context 'Creates the diagonal winning combinations to use later on'
+        it 'returns a diagonal winning nested array of length 12' do
+            game_over_diagonal.board = [[0,0,1,0,0,0,], [0,0,0,1,0,0,], [0,0,0,0,1,0,], [0,0,0,0,0,1], [0,0,0,0,0,0], [0,0,0,0,0,0], [0,0,0,0,0,0]]
+            game_over_diagonal.create_diagonal_winning_combination
+            expect(game_over_diagonal.create_diagonal_winning_combination).to be_an_instance_of(Array).and have_attributes(size: 12)
+        end
+
+        it 'Returns  the first diagonal combination [1, 1, 1, 1]' do
+            game_over_diagonal.board = [[0,0,1,0,0,0,], [0,0,0,1,0,0,], [0,0,0,0,1,0,], [0,0,0,0,0,1], [0,0,0,0,0,0], [0,0,0,0,0,0], [0,0,0,0,0,0]]
+            diagonal_comb = game_over_diagonal.create_diagonal_winning_combination
+            expect(diagonal_comb[0]).to eq([1, 1, 1, 1])
+        end
+
+    end
+
+    describe '#check_diagonals' do
+        subject(:game_over_diagonal) { described_class.new }
+        it 'Returns true when a player has four symbols in a diagonal row' do
+            game_over_diagonal.board = [[0,0,1,0,0,0,], [0,0,0,1,0,0,], [0,0,0,0,1,0,], [0,0,0,0,0,1], [0,0,0,0,0,0], [0,0,0,0,0,0], [0,0,0,0,0,0]]
+            diagonal_comb = game_over_diagonal.create_diagonal_winning_combination
+            expect(game_over_diagonal.check_diagonals(diagonal_comb)).to be true
+        end
+
+        it 'Returns false when a player has not four symbols in a diagonal row' do
+            game_over_diagonal.board = [[1,0,0,0,0,0,], [0,0,0,1,0,0,], [0,0,0,0,1,0,], [0,0,0,0,0,1], [0,0,0,0,0,0], [0,0,0,0,0,0], [0,0,0,0,0,0]]
+            diagonal_comb = game_over_diagonal.create_diagonal_winning_combination
+            expect(game_over_diagonal.check_diagonals(diagonal_comb)).to be false
+        end
+    end
+   
+        
 end
