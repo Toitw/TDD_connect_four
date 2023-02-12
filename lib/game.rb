@@ -17,11 +17,11 @@ class Game
     end
 
     def game_intro
-        puts 'Hello Player1, what is your name?'
+        puts "\nHello Player1, what is your name?"
         @player1.name = gets.chomp
-        puts 'Hello Player2, and your name is?'
+        puts "\nHello Player2, and your name is?"
         @player2.name = gets.chomp
-        puts "#{@player1.name} you start playing"
+        puts "\n#{@player1.name} you start playing"
     end
     #Knowing the column, look for the index of the first available slot in the column and puts the current player's symbol
     def drop_token(column)
@@ -31,7 +31,7 @@ class Game
 
     def select_column
         display_board
-        puts "#{@current_player.name}, select a column to drop your token"
+        puts "\n#{@current_player.name}, select a column to drop your token"
         @column_selection = gets.chomp.to_i - 1
     end
 
@@ -89,9 +89,9 @@ class Game
 
     def play_again?
 
-        puts "Game over! #{@current_player.name} wins. Would you like to play again? Y/N"
+        puts "\nGame over! #{@current_player.name} wins. Would you like to play again? Y/N"
         answer = gets.chomp
-        answer == "Y" ? Game.new.play : "Thank you for playing :)"
+        answer == "Y" ? Game.new.play : "\nThank you for playing :)"
     end
 
     def play_round
@@ -109,12 +109,12 @@ class Game
     end
 
     def display_board
-        puts "1  2  3  4  5  6  7"
+        puts "\n| 1  2  3  4  5  6  7 |"
         @row_check_board = @board[0].zip(@board[1], @board[2], @board[3], @board[4], @board[5], @board[6])
         @row_check_board.reverse.each do |row|
-            new_row = row.join(" ")
-            puts new_row.gsub(/[012]/, "0" => "", "1" => "\u26AA", "2" => "\u26AB")
+            puts "| " + row.join(" ").gsub(/[012]/, "0" => "  ", "1" => "\u26AA", "2" => "\u26AB") + "|"
         end
+        puts "-----------------------"
     end
         
 end
