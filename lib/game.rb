@@ -109,10 +109,11 @@ class Game
     end
 
     def display_board
-        puts "1 2 3 4 5 6 7"
+        puts "1  2  3  4  5  6  7"
         @row_check_board = @board[0].zip(@board[1], @board[2], @board[3], @board[4], @board[5], @board[6])
-        @row_check_board.each do |row|
-            puts row.join(" ")
+        @row_check_board.reverse.each do |row|
+            new_row = row.join(" ")
+            puts new_row.gsub(/[012]/, "0" => "", "1" => "\u26AA", "2" => "\u26AB")
         end
     end
         
