@@ -35,6 +35,15 @@ class Game
         @column_selection = gets.chomp.to_i - 1
     end
 
+    def full_column?(column)
+        if @board[column - 1].include?(0) 
+            return 
+        else
+            puts "Column is full, please choose another column"
+            select_column
+        end
+    end
+
     def check_rows
         #zip combine the same index of diferent arrays in an array. Perfect to create the rows
         @row_check_board = @board[0].zip(@board[1], @board[2], @board[3], @board[4], @board[5], @board[6])
