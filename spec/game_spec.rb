@@ -156,12 +156,18 @@ describe Game do
     end    
     
     describe '#full_column?' do
-        subject(:column_is_full) {described_class.new}
-        let(:column_number) { instance_variable_set(:@column_selection, 1)}
-        context 'Player choose a column that has all 6 tokens already'
-        it "returns a text telling you that column is full" do
+        subject(:column_is_full) { described_class.new }
+      
+        context 'when the chosen column is full' do
+          it 'returns a text telling you that column is full' do
+            # Dummy implementation for select_column
+            def column_is_full.select_column
+              return
+            end
+      
             column_is_full.board[0] = [1,2,1,2,1,1]
-            expect(column_is_full.full_column?(1)).to receive(:puts).with("Column is full, please choose another column")
+            expect { column_is_full.full_column?(1) }.to output("Column is full, please choose another column\n").to_stdout
+          end
         end
     end
 
