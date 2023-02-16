@@ -89,8 +89,12 @@ class Game
 
     def game_over?
         if check_columns == true || check_rows == true || check_diagonals(create_diagonal_winning_combination) == true
-            @game_over = true
             puts "\nGame over! #{@current_player.name} wins."
+            @game_over = true
+        elsif draw_game? == false
+            puts "It's a draw game!"
+            @game_over = true
+            true
         else
             @current_player == @player1 ? @current_player = @player2 : @current_player = @player1
             false

@@ -153,6 +153,16 @@ describe Game do
             game_over.game_over?
             expect(game_over.current_player.symbol).to eq(2)
         end
+
+        context 'When it is a draw' do
+            before do
+                allow(game_over).to receive(:draw_game?).and_return(false)
+            end
+
+                it 'returns true when draw_game? is false' do
+                    expect(game_over.game_over?).to be true
+                end
+        end
     end    
     
     describe '#full_column?' do
