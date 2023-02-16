@@ -90,6 +90,7 @@ class Game
     def game_over?
         if check_columns == true || check_rows == true || check_diagonals(create_diagonal_winning_combination) == true
             @game_over = true
+            puts "\nGame over! #{@current_player.name} wins."
         else
             @current_player == @player1 ? @current_player = @player2 : @current_player = @player1
             false
@@ -101,8 +102,7 @@ class Game
     end
 
     def play_again?
-
-        puts "\nGame over! #{@current_player.name} wins. Would you like to play again? Y/N"
+        puts "\nWould you like to play again? Y/N"
         answer = gets.chomp
         answer == "Y" ? Game.new.play : "\nThank you for playing :)"
     end
