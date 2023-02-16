@@ -176,7 +176,7 @@ describe Game do
             end
       
             column_is_full.board[0] = [1,2,1,2,1,1]
-            expect { column_is_full.full_column?(1) }.to output("Column is full, please choose another column\n").to_stdout
+            expect { column_is_full.full_column?(0) }.to output("Column is full, please choose another column\n").to_stdout
           end
         end
     end

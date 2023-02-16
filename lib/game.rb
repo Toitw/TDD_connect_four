@@ -36,7 +36,7 @@ class Game
     end
 
     def full_column?(column)
-        if @board[column - 1].include?(0) 
+        if @board[column].include?(0) 
             return 
         else
             puts "Column is full, please choose another column"
@@ -113,6 +113,7 @@ class Game
 
     def play_round
         select_column
+        full_column?(@column_selection)
         drop_token(@column_selection)
     end
 
