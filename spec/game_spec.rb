@@ -171,4 +171,15 @@ describe Game do
         end
     end
 
+    describe 'draw_game?' do
+        subject(:draw_game) { described_class.new }
+
+        context 'when there is no more tokens left and nobody won' do
+            it 'returns false when there is no 0 in the board array' do
+                draw_game.board = [[1,1,1,1,1,1], [1,1,1,1,1,1], [1,1,1,1,1,1], [1,1,1,1,1,1], [1,1,1,1,1,1], [1,1,1,1,1,1]]
+                expect(draw_game.draw_game?).to be false
+            end
+        end
+    end
+
 end

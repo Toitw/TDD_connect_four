@@ -96,6 +96,10 @@ class Game
         end
     end
 
+    def draw_game?
+        @board.flatten.include?(0)
+    end
+
     def play_again?
 
         puts "\nGame over! #{@current_player.name} wins. Would you like to play again? Y/N"
